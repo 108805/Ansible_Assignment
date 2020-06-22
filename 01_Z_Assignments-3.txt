@@ -32,3 +32,26 @@ Ansible must be installed and configured on the control node. If you connect to 
 The user ansible must also be present on all servers with appropriate shared keys for access to managed servers from the control node. Make sure to use this user to complete the commands.
 The default Ansible inventory must be configured with the appropriate hosts and groups.
 /etc/hosts entries must be present on control1 for the managed servers.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+---
+- hosts: dbsystems
+  become: yes
+  vars:
+    users: 
+    - consultant
+    - supervisor
+  tasks:
+  - name: creating the user accounts in dbsystems
+    user:
+      name: "{{ item }}"
+      append: yes
+      createhome: yes
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+    with_items: "{{ users }}"
+
+
+drwxr-xr-x 3 consultant                     consultant                     4096 Jun 21 10:11 consultant
+drwxr-xr-x 3 supervisor                     supervisor                     4096 Jun 21 10:11 supervisor
