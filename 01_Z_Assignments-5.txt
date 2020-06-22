@@ -18,3 +18,23 @@ Install Ansible on the control node.
 Create user ansible on all servers, with appropriate shared keys for access to the necessary servers from the control node.
 apps.l33t.com is unavailable by default.
 We may force a state change by running change_l33t.sh available at https://github.com/satyensingh/ansible-assignments-scripts.git.
+
+----------------------------------------------------------------------------------------------------------------------------------------
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: File Downloading
+      block: 
+       - git:
+           repo: https://github.com/satyensingh/ansible-assignments-scripts.git
+           dest: /home/ubuntu/ansible-assignments-scripts
+       - debug: msg="File downloaded"
+       - replace:
+           path: /home/ubuntu/ansible-assignments-scripts
+           regexp: "#BLANKLINE"
+           replace: '\n'
+      rescue:
+        - debug: msg="l33t.com appears to be down. Try again later."
+      always:
+        - debug: msg="Attempt completed."
