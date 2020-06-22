@@ -15,3 +15,23 @@ Summary tasks list:
 5. Configure the playbook to retrieve the website from http://repo.example.com/website.tgz on each server in the web group.
 6. Configure the playbook to unarchive the website into /var/www/html on all servers in the web group.
 7. Execute the playbook you created using the inventory you created to verify your work.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+---
+- hosts: web
+  become: yes
+  tasks:
+  - name: installing httpd on webservers
+    apt:
+      name: apache2
+      state: latest
+      update_cache: yes
+  - name: enabling the httpd service
+    service:
+      name: apache2
+      state: reloaded
+  - name: retriving the website
+    get_url:
+      url: http://repo.example.com/website.tgz
+      dest: /var/www/html
